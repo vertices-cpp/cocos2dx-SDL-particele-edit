@@ -221,13 +221,13 @@ int main(int, char**)
     window_flags = (SDL_WindowFlags)(window_flags | SDL_WINDOW_FULLSCREEN);
 #endif
 
-    int winW = 1600, winH = 900;
+    int winW = 1080, winH = 768;
 #if PE_MOBILE
     winW = 0; winH = 0;   // 手机全屏
 #endif
 
     SDL_Window* window = SDL_CreateWindow(
-        "Particle Editor",
+        "Particle Editor QQ:1598058687 桔皮沙拉",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         winW, winH, window_flags);
     if (!window) { SDL_Log("CreateWindow failed: %s", SDL_GetError()); return -1; }
