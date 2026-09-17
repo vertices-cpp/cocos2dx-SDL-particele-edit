@@ -318,6 +318,10 @@ public:
 
     void initIndices();
 
+	const BlendFunc & getBlendFunc() const;
+
+	void setBlendFunc(const BlendFunc & blendFunc);
+
     void setOpacityModifyRGB(bool opacityModifyRGB) { _opacityModifyRGB = opacityModifyRGB; }
     bool isOpacityModifyRGB() const { return _opacityModifyRGB; }
 
@@ -376,7 +380,7 @@ public:
         if (_transformDirty)
         {
             Mat3 translation = Mat3::createTranslation(_position.x, _position.y);
-            //³õÊ¼»¯
+            //åˆå§‹åŒ–
             _transform.reset();
             if (_scaleX != 1.f || _scaleY != 1.f)
             {
@@ -392,7 +396,7 @@ public:
             {
                 rotation = Mat3::createRotation(_center, _rotation);
             }
-            //ÏÈËõ·Å£¬ÇãĞ±£¬Ğı×ª£¬ ÔÙÆ½ÒÆ
+            //å…ˆç¼©æ”¾ï¼Œå€¾æ–œï¼Œæ—‹è½¬ï¼Œ å†å¹³ç§»
 
             _transform = translation * rotation * _transform;
         }
@@ -481,7 +485,7 @@ protected:
     bool _paused;
     bool _sourcePositionCompatible;
     Rect _clip = Rect::ZERO;
-    //Ìí¼Ó²¿·Ö
+    //æ·»åŠ éƒ¨åˆ†
     mutable Mat3 _transform;
     mutable bool _transformDirty = true,  _transformUpdated = true;
     float _rotation = 0.0f ;
