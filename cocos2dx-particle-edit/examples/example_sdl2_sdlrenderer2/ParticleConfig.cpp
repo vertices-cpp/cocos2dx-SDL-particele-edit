@@ -69,8 +69,8 @@ bool ParticleConfig::saveToPlist(const char* path) const
     addReal(doc, dict, "finishParticleSize", finishParticleSize);
     addReal(doc, dict, "finishParticleSizeVariance", finishParticleSizeVariance);
 
-    addReal(doc, dict, "gravityx", gravityx);
-    addReal(doc, dict, "gravityy", gravityy);
+    addReal(doc, dict, "gravityx", -gravityx);
+    addReal(doc, dict, "gravityy", -gravityy);
 
     addReal(doc, dict, "maxParticles", (float)maxParticles);
 
@@ -93,7 +93,7 @@ bool ParticleConfig::saveToPlist(const char* path) const
     addReal(doc, dict, "sourcePositionx", sourcePositionx);
     addReal(doc, dict, "sourcePositiony", sourcePositiony);
 
-    addReal(doc, dict, "speed", speed);
+    addReal(doc, dict, "speed", -speed);
     addReal(doc, dict, "speedVariance", speedVariance);
 
     addReal(doc, dict, "startColorAlpha", startColorAlpha);
@@ -189,8 +189,8 @@ bool ParticleConfig::loadFromPlist(const char* path)
     finishParticleSize = F("finishParticleSize", -1.0f);
     finishParticleSizeVariance = F("finishParticleSizeVariance", 0.0f);
 
-    gravityx = F("gravityx", 0.0f);
-    gravityy = F("gravityy", 0.0f);
+    gravityx = -F("gravityx", 0.0f);
+    gravityy = -F("gravityy", 0.0f);
 
     maxParticles = I("maxParticles", 150);
 
@@ -213,7 +213,7 @@ bool ParticleConfig::loadFromPlist(const char* path)
     sourcePositionx = F("sourcePositionx", 0.0f);
     sourcePositiony = F("sourcePositiony", 0.0f);
 
-    speed = F("speed", 0.0f);
+    speed = -F("speed", 0.0f);
     speedVariance = F("speedVariance", 0.0f);
 
     startColorAlpha = F("startColorAlpha", 1.0f);
