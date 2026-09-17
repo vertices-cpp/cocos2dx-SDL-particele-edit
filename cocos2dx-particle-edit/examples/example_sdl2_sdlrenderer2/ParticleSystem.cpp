@@ -855,7 +855,7 @@ void ParticleSystem::setBlendAdditive(bool additive)
 
 bool ParticleSystem::isBlendAdditive() const
 {
-    return 1;// (_blendFunc.src == backend::BlendFactor::SRC_ALPHA && _blendFunc.dst == backend::BlendFactor::ONE);
+    return   (_blendFunc.src ==  BlendFactor::SRC_ALPHA && _blendFunc.dst ==  BlendFactor::ONE);
 }
 
 // ParticleSystem - Properties of Gravity Mode 
@@ -1113,18 +1113,18 @@ void  ParticleSystem::initIndices()
         _indices[i6 + 3] = (unsigned short)i4 + 3;
     }
 }
-// const BlendFunc& ParticleSystem::getBlendFunc() const
-// {
-//     return _blendFunc;
-// }
+const BlendFunc& ParticleSystem::getBlendFunc() const
+{
+    return _blendFunc;
+}
 
-// void ParticleSystem::setBlendFunc(const BlendFunc &blendFunc)
-// {
-//     if( _blendFunc.src != blendFunc.src || _blendFunc.dst != blendFunc.dst ) {
-//         _blendFunc = blendFunc;
-//         this->updateBlendFunc();
-//     }
-// }
+ void ParticleSystem::setBlendFunc(const BlendFunc &blendFunc)
+ {
+     if( _blendFunc.src != blendFunc.src || _blendFunc.dst != blendFunc.dst ) {
+         _blendFunc = blendFunc;
+         this->updateBlendFunc();
+     }
+ }
 
 bool ParticleSystem::isAutoRemoveOnFinish() const
 {
