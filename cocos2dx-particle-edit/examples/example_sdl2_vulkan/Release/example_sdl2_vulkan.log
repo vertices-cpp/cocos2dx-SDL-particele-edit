@@ -1,0 +1,3 @@
+﻿d:\cpp\cocos2dx-particle-edit\backends\imgui_impl_sdl2.cpp(86): fatal error C1083: 无法打开包括文件: “SDL.h”: No such file or directory
+d:\cpp\cocos2dx-particle-edit\backends\imgui_impl_vulkan.h(46): fatal error C1083: 无法打开包括文件: “vulkan/vulkan.h”: No such file or directory
+d:\cpp\cocos2dx-particle-edit\backends\imgui_impl_vulkan.h(46): fatal error C1083: 无法打开包括文件: “vulkan/vulkan.h”: No such file or directory
