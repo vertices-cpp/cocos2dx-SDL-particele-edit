@@ -20,7 +20,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 add_subdirectory(third_party)
 
 # ============================================================
-# 主 exe：统一扫描 Classes + example_sdl2_sdlrenderer2
+# 主 exe 源文件
 # ============================================================
 # Classes 递归扫（将来可能有子目录）
 file(GLOB_RECURSE PROJ_CLASSES CONFIGURE_DEPENDS
@@ -36,9 +36,18 @@ file(GLOB PROJ_MAIN CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/example_sdl2_sdlrenderer2/*.h"
 )
 
+# Resources 递归扫（不参与编译，只让 VS 显示）
+file(GLOB_RECURSE PROJ_RESOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/*"
+)
+set_source_files_properties(${PROJ_RESOURCES} PROPERTIES HEADER_FILE_ONLY TRUE)
+
 set(PROJ_SOURCES ${PROJ_CLASSES} ${PROJ_MAIN})
 
-add_executable(${PROJECT_NAME} ${PROJ_SOURCES})
+add_executable(${PROJECT_NAME}
+    ${PROJ_SOURCES}
+    ${PROJ_RESOURCES}
+)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Classes
@@ -52,12 +61,20 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ImGuiFileDialog
 )
 
-# ★ 全部塞进 Source Files，保留目录树
+# ============================================================
+# VS 分组
+# ============================================================
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
              PREFIX "Source Files"
              FILES ${PROJ_SOURCES})
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+             PREFIX "Resources"
+             FILES ${PROJ_RESOURCES})
+
+# ============================================================
 # 拷贝 SDL2 DLL
+# ============================================================
 file(GLOB_RECURSE SDL2_DLLS
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/*/lib/${ARCH_DIR}/*.dll"
 )
@@ -70,14 +87,18 @@ if(SDL2_DLLS)
     )
 endif()
 
+# 让 Resources 目录增删文件时也重跑 cmake
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+)
+
 # ============================================================
-# 资源同步（Python 增量：只拷修改过的）
+# 资源同步（Python 增量）
 # ============================================================
 set(GAME_RES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 set(SYNC_SCRIPT  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/scripts/sync_folder.py")
 
 if(EXISTS "${GAME_RES_DIR}" AND EXISTS "${SYNC_SCRIPT}")
-    # 找 Python（优先 Python3，退回 Python2）
     find_package(Python3 COMPONENTS Interpreter QUIET)
     if(NOT Python3_Interpreter_FOUND)
         find_package(Python2 COMPONENTS Interpreter REQUIRED)
@@ -94,6 +115,5 @@ if(EXISTS "${GAME_RES_DIR}" AND EXISTS "${SYNC_SCRIPT}")
         COMMENT "Syncing Resources (incremental)..."
     )
 
-    # 保证构建前先同步，F5 也能触发
     add_dependencies(${PROJECT_NAME} SYNC_RESOURCE)
 endif()
