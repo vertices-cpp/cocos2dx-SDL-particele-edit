@@ -1,4 +1,4 @@
-#[[ Â·¾¶: D:\cplusplus\partilce_edit\CMakeLists.txt ]]
+#[[ è·¯å¾„: D:\cplusplus\partilce_edit\CMakeLists.txt ]]
 
 cmake_minimum_required(VERSION 3.17)
 project(particle_editor C CXX)
@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # -------------------------------------------------------------
-# ¹Ø¼ü£ºÈ«¾ÖÇ¿ÖÆ MSVC ½«ËùÓĞÔ´ÎÄ¼ş°´ UTF-8 ¶ÁÈ¡£¬³¹µ×½â¾ö C4819 ºÍ C2001
+# å…³é”®ï¼šå…¨å±€å¼ºåˆ¶ MSVC å°†æ‰€æœ‰æºæ–‡ä»¶æŒ‰ UTF-8 è¯»å–ï¼Œå½»åº•è§£å†³ C4819 å’Œ C2001
 # -------------------------------------------------------------
 if (MSVC)
     add_compile_options(/utf-8)
@@ -63,7 +63,7 @@ if(MSVC OR XCODE)
 endif()
 
 # -------------------------------------------------------------
-# ×ÊÔ´Í¬²½ÅäÖÃ (·Åµ½¸ùÄ¿Â¼£¬×¼È·Ê¶±ğ¹¤³ÌºÍÄ¿Â¼)
+# èµ„æºåŒæ­¥é…ç½® (æ”¾åˆ°æ ¹ç›®å½•ï¼Œå‡†ç¡®è¯†åˆ«å·¥ç¨‹å’Œç›®å½•)
 # -------------------------------------------------------------
 set(GAME_RES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 set(SYNC_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/third_party/scripts/sync_folder.py")
@@ -80,6 +80,6 @@ if(EXISTS "${GAME_RES_DIR}" AND EXISTS "${SYNC_SCRIPT}")
         COMMENT "Syncing Resources using sync_folder.py..."
     )
 
-    # È·±£Ö÷³ÌĞò¹¹½¨Ê±´¥·¢×ÊÔ´Í¬²½Ä¿±ê
+    # ç¡®ä¿ä¸»ç¨‹åºæ„å»ºæ—¶è§¦å‘èµ„æºåŒæ­¥ç›®æ ‡
     add_dependencies(${PROJECT_NAME} SYNC_RESOURCE)
 endif()
