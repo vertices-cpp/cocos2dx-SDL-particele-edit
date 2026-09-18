@@ -69,3 +69,31 @@ if(SDL2_DLLS)
         COMMENT "Copying SDL2 DLLs..."
     )
 endif()
+
+# ============================================================
+# 资源同步（Python 增量：只拷修改过的）
+# ============================================================
+set(GAME_RES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+set(SYNC_SCRIPT  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/scripts/sync_folder.py")
+
+if(EXISTS "${GAME_RES_DIR}" AND EXISTS "${SYNC_SCRIPT}")
+    # 找 Python（优先 Python3，退回 Python2）
+    find_package(Python3 COMPONENTS Interpreter QUIET)
+    if(NOT Python3_Interpreter_FOUND)
+        find_package(Python2 COMPONENTS Interpreter REQUIRED)
+        set(SYNC_PYTHON "${Python2_EXECUTABLE}")
+    else()
+        set(SYNC_PYTHON "${Python3_EXECUTABLE}")
+    endif()
+
+    add_custom_target(SYNC_RESOURCE ALL
+        COMMAND "${SYNC_PYTHON}" "${SYNC_SCRIPT}"
+            -s "${GAME_RES_DIR}"
+            -d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/Resources"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "Syncing Resources (incremental)..."
+    )
+
+    # 保证构建前先同步，F5 也能触发
+    add_dependencies(${PROJECT_NAME} SYNC_RESOURCE)
+endif()
