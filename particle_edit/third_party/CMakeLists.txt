@@ -1,74 +1,23 @@
-#[[ Â·¾¶: D:\cplusplus\partilce_edit\third_party\CMakeLists.txt ]]
-
 cmake_minimum_required(VERSION 3.17)
-project(third_party_libs C CXX)
 
-# 1. °üº¬µÚÈı·½¸÷¸ö×ÓÄ£¿éµÄ CMakeLists.txt ÅäÖÃ
-include(imgui-1.89.9/CMakeLists.txt)
-include(ImGuiFileDialog/CMakeLists.txt)
-include(tinyxml2/CMakeLists.txt)
+# ---------- SDL2 é¢„ç¼–è¯‘åº“ï¼ˆINTERFACEï¼‰ ----------
+add_library(sdl2_libs INTERFACE)
 
-# 2. »ã×ÜËùÓĞ×ÓÄ£¿éµÄÔ´ÂëÓëÍ·ÎÄ¼ş
-set(THIRD_PARTY_HEADER
-    ${imgui_header}
-    ${ImGuiFileDialog_header}
-    ${tinyxml2_header}
-)
+set(SDL2_LIB_DIR       "${CMAKE_CURRENT_SOURCE_DIR}/SDL2/SDL2-2.0.20/lib/${ARCH_DIR}")
+set(SDL2_IMAGE_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SDL2/SDL2_image-2.0.5/lib/${ARCH_DIR}")
 
-set(THIRD_PARTY_SRC
-    ${imgui_src}
-    ${ImGuiFileDialog_src}
-    ${tinyxml2_src}
-)
-
-set(ALL_THIRD_PARTY_FILES ${THIRD_PARTY_HEADER} ${THIRD_PARTY_SRC})
-
-# 3. ´´½¨Í³Ò»µÄµÚÈı·½¾²Ì¬¿â
-add_library(third_party STATIC ${ALL_THIRD_PARTY_FILES})
-
-# 4. ÅäÖÃÍ·ÎÄ¼şËÑË÷Â·¾¶ (Ê¹ÓÃ PUBLIC ×Ô¶¯Í¸´«¸øÖ÷¹¤³Ì)
-target_include_directories(third_party PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui-1.89.9
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui-1.89.9/backends
-    ${CMAKE_CURRENT_SOURCE_DIR}/ImGuiFileDialog
-    ${CMAKE_CURRENT_SOURCE_DIR}/tinyxml2
+target_include_directories(sdl2_libs INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}/SDL2/SDL2-2.0.20/include
     ${CMAKE_CURRENT_SOURCE_DIR}/SDL2/SDL2_image-2.0.5/include
 )
 
-# 5. ×Ô¶¯¸ù¾İ±àÒëÄ¿±ê¼Ü¹¹£¨x86 / x64£©Ñ¡ÔñÕıÈ·µÄ SDL2 ¿âÂ·¾¶
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(ARCH_DIR "x64")
-else()
-    set(ARCH_DIR "x86")
-endif()
-
-set(SDL2_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SDL2/SDL2-2.0.20/lib/${ARCH_DIR}")
-set(SDL2_IMAGE_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SDL2/SDL2_image-2.0.5/lib/${ARCH_DIR}")
-
-# ²¹³äÁ´½Ó Windows Ô­ÉúÒÀÀµ¿â
-target_link_libraries(third_party PUBLIC
+target_link_libraries(sdl2_libs INTERFACE
     ${SDL2_LIB_DIR}/SDL2.lib
     ${SDL2_LIB_DIR}/SDL2main.lib
-    ${SDL2_IMAGE_LIB_DIR}/SDL2_image.lib 
+    ${SDL2_IMAGE_LIB_DIR}/SDL2_image.lib
 )
 
-# 6. ×Ô¶¯¿½±´ SDL2 Ïà¹Ø DLL µ½Éú³ÉÄ¿Â¼
-file(GLOB_RECURSE SDL2_DLLS 
-    "${CMAKE_CURRENT_SOURCE_DIR}/SDL2/*/lib/${ARCH_DIR}/*.dll"
-)
-
-if(SDL2_DLLS)
-    add_custom_command(TARGET third_party POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${SDL2_DLLS}
-            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/"
-        COMMAND_EXPAND_LISTS
-        COMMENT "Copying all found SDL2 DLLs to executable folder..."
-    )
-endif()
-
-# 7. °´ÎïÀí´ÅÅÌÄ¿Â¼ÅäÖÃ VS ĞéÄâÉ¸Ñ¡Æ÷
-if(MSVC OR XCODE)
-    source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${ALL_THIRD_PARTY_FILES})
-endif()
+# ---------- å„å­æ¨¡å— ----------
+add_subdirectory(imgui-1.89.9)
+add_subdirectory(tinyxml2)
+add_subdirectory(ImGuiFileDialog)
