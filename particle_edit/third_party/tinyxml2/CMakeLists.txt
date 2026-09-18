@@ -1,9 +1,14 @@
-#[[ 路径: third_party/tinyxml2/CMakeLists.txt ]]
-
-set(tinyxml2_header
-    tinyxml2/tinyxml2.h
+set(TINYXML2_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/tinyxml2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tinyxml2.cpp
 )
 
-set(tinyxml2_src
-    tinyxml2/tinyxml2.cpp
+add_library(tinyxml2 STATIC ${TINYXML2_FILES})
+
+target_include_directories(tinyxml2 PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+             PREFIX "Source Files"
+             FILES ${TINYXML2_FILES})
